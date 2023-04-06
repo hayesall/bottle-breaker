@@ -1,4 +1,4 @@
-name: Linting
+name: Tests
 
 on: [push]
 
@@ -21,3 +21,6 @@ jobs:
     - name: 🫶 Linting code with ruff, isort, and black
       run: |
         make lint
+    - name: ✅ Run Tests
+      run: |
+        make test
