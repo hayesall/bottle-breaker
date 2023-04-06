@@ -1,0 +1,17 @@
+.PHONY: lint style build
+
+## Run linting and check code formatting
+lint:
+	ruff .
+	isort --check .
+	black --check .
+
+## Style code for consistency
+style:
+	isort .
+	black .
+
+## Build dependencies
+build:
+	pip-compile --resolver=backtracking --generate-hashes --output-file=requirements.txt pyproject.toml
+	pip-compile --resolver=backtracking --generate-hashes --extra=dev --output-file=requirements-dev.txt pyproject.toml
