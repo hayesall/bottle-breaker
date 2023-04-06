@@ -13,5 +13,5 @@ style:
 
 ## Build dependencies
 build:
-	pip-compile --resolver=backtracking --generate-hashes --output-file=requirements.txt pyproject.toml
-	pip-compile --resolver=backtracking --generate-hashes --extra=dev --output-file=requirements-dev.txt pyproject.toml
+	pip-compile --allow-unsafe --resolver=backtracking --generate-hashes --output-file=requirements.txt pyproject.toml
+	pip-compile --allow-unsafe --resolver=backtracking --generate-hashes --extra=dev --output-file=requirements-dev.txt pyproject.toml
