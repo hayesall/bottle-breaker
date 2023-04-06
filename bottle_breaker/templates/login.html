@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block pagetitle %}Login{% endblock %}
+
+{% block content %}
+
+{% if current_user.is_authenticated %}
+
+<p>Hi {{ current_user.id }}! You are currently signed in.</p>
+
+{% else %}
+
+<form method="POST" action="/login">
+    {{ form.csrf_token }}
+
+    <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
+    {% if form.username.errors %}
+        <ul class="errors">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <div>{{ form.password.label }}: {{ form.password() }}</div>
+    {% if form.password.errors %}
+        <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+    <button class="btn btn-primary" type="reset" value="Reset">Reset</button>
+
+</form>
+
+{% endif %}
+
+{% endblock %}

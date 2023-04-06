@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Unauthorized{% endblock %}
+
+{% block content %}
+
+<h1>Unauthorized :(</h1>
+
+<p>Perhaps you need to <a href="{{ url_for('login') }}">login</a>?</p>
+
+{% endblock %}

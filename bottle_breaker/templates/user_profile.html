@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block pagetitle %} {{ username }} {% endblock %}
+
+{% block content %}
+
+<p>Hi {{ current_user.id }}! You are currently signed in.</p>
+
+{% endblock %}
