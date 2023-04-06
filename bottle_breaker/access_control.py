@@ -12,6 +12,8 @@ from flask_login import AnonymousUserMixin, UserMixin
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, validators
 
+from bottle_breaker._base_db import BaseDB
+
 
 def create_tables(db_path: Union[str, PathLike] = "sample_database.db"):
     """First-time setup to create all tables in the database."""
@@ -22,24 +24,10 @@ def create_tables(db_path: Union[str, PathLike] = "sample_database.db"):
     conn.commit()
 
 
-class Users:
+class Users(BaseDB):
     """User management and access control."""
 
     HASHING_ITERATIONS = 500_000
-
-    def __init__(self, db_path: Union[str, PathLike] = "sample_database.db"):
-        self.conn = sqlite3.connect(db_path)
-        self.conn.row_factory = sqlite3.Row
-        self.curr = self.conn.cursor()
-
-    def __del__(self):
-        self.conn.close()
-
-    def close(self):
-        self.conn.close()
-
-    def commit(self):
-        self.conn.commit()
 
     def get_users(self):
         self.curr.execute("SELECT display_name, username, email FROM users")
