@@ -8,20 +8,27 @@
 
 <p class="lead"><em>The new social media sensation that's sweeping the nation!</em></p>
 
-<form method="POST" action="/login">
+<h4 class="display-4 mt-5">Sign up</h4>
+
+<form method="POST" action="/register">
     {{ form.csrf_token }}
 
-    <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
+    <div>{{ form.username.label }}: {{ form.username(class="m-2") }}</div>
+
+    {% if request.args.error %}
+        <ul class="errors"><li>{{ request.args.error }}</li></ul>
+    {% endif %}
+
     {% if form.username.errors %}
         <ul class="errors">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
 
-    <div>{{ form.password.label }}: {{ form.password() }}</div>
+    <div>{{ form.password.label }}: {{ form.password(class="m-2") }}</div>
     {% if form.password.errors %}
         <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
 
-    <div>{{ form.confirm_password.label }}: {{ form.confirm_password() }}</div>
+    <div>{{ form.confirm_password.label }}: {{ form.confirm_password(class="m-2") }}</div>
     {% if form.confirm_password.errors %}
         <ul class="errors">{% for error in form.confirm_password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
