@@ -29,19 +29,13 @@ class Users(BaseDB):
 
     HASHING_ITERATIONS = 500_000
 
-    def get_users(self):
-        self.curr.execute("SELECT display_name, username, email FROM users")
-        return self.curr.fetchall()
-
     def get_usernames(self):
         self.curr.execute("SELECT username FROM users")
         return [user["username"] for user in self.curr.fetchall()]
 
-    def set_display_name(self, username: str, display_name: str):
-        self.curr.execute(
-            "UPDATE users SET display_name = ? WHERE username = ?",
-            (display_name, username),
-        )
+    def delete_user(self, username: str):
+        self.curr.execute("PRAGMA foreign_keys = ON;")
+        self.curr.execute("DELETE FROM users WHERE username = ?;", (username,))
         self.commit()
 
     def add_user(
