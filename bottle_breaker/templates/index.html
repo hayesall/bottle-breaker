@@ -7,6 +7,37 @@
 <h1 class="display-1">bottle-breaker</h1>
 
 <p class="lead"><em>The new social media sensation that's sweeping the nation!</em></p>
+
+<h4 class="display-4 mt-5">Sign up</h4>
+
+<form method="POST" action="/register">
+    {{ form.csrf_token }}
+
+    <div>{{ form.username(class="m-2", placeholder="Username") }}</div>
+
+    {% if username_error %}
+        <ul class="text-danger"><li>{{ username_error }}</li></ul>
+    {% endif %}
+
+    {% if form.username.errors %}
+        <ul class="text-danger">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <div>{{ form.password(class="m-2", placeholder="Password") }}</div>
+    {% if form.password.errors %}
+        <ul class="text-danger">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <div>{{ form.confirm_password(class="m-2", placeholder="Re-type password") }}</div>
+    {% if form.confirm_password.errors %}
+        <ul class="text-danger">{% for error in form.confirm_password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+
+</form>
+
+
 {% else %}
 
 {% if not posts %}

@@ -7,7 +7,13 @@ from typing import Union
 from flask import Flask, g, redirect, render_template, request, url_for
 from flask_login import LoginManager, login_required, login_user, logout_user
 
-from bottle_breaker.access_control import AnonymousUser, LoginForm, User, Users
+from bottle_breaker.access_control import (
+    AnonymousUser,
+    LoginForm,
+    RegisterForm,
+    User,
+    Users,
+)
 from bottle_breaker.posts import Posts
 
 
@@ -68,11 +74,12 @@ def load_user(username):
 
 @app.route("/")
 def index():
-    """Home page, showing all posts when the user is logged in."""
+    """Home page, showing all posts when the user is logged in or a
+    registration form otherwise"""
     with app.app_context():
         db = get_db()
         posts = db.posts.get_posts()
-    return render_template("index.html", posts=posts)
+    return render_template("index.html", posts=posts, form=RegisterForm())
 
 
 @app.route("/make-post", methods=["POST"])
@@ -93,6 +100,29 @@ def user_profile(username=None):
         db = get_db()
         posts = db.posts.get_posts_from_username(username)
     return render_template("user_profile.html", username=username, posts=posts)
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register that the user createa a new account."""
+    form = RegisterForm(request.form)
+    with app.app_context():
+        db = get_db()
+        if form.validate_on_submit():
+            if (
+                db.users.add_user(form.username.data, form.password.data)
+                == "Success"
+            ):
+                return redirect(url_for("login", username=form.username.data))
+            else:
+                # User already exists. Notify the user.
+                print("Yep, that user exists.")
+                return render_template(
+                    "index.html",
+                    form=form,
+                    username_error="User already exists.",
+                )
+        return render_template("index.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
