@@ -4,8 +4,8 @@
 import secrets
 from datetime import datetime
 from hashlib import pbkdf2_hmac
-from typing import Optional
 from sqlite3 import IntegrityError
+from typing import Optional
 
 from flask_login import AnonymousUserMixin, UserMixin
 from flask_wtf import FlaskForm
@@ -60,7 +60,6 @@ class Users(BaseDB):
         except IntegrityError:
             return "Username already exists"
 
-
     def verify_user(self, username: str, password: str):
         """Returns True if the user exists and their password is correct."""
 
@@ -93,8 +92,13 @@ class RegisterForm(FlaskForm):
     username = StringField("Username", [validators.DataRequired()])
     password = PasswordField("Password", [validators.DataRequired()])
     confirm_password = PasswordField(
-        "Confirm Password", [validators.DataRequired(), validators.EqualTo("password", message="Passwords must match")]
+        "Confirm Password",
+        [
+            validators.DataRequired(),
+            validators.EqualTo("password", message="Passwords must match"),
+        ],
     )
+
 
 class User(UserMixin):
     DB_PATH = "sample_database.db"
