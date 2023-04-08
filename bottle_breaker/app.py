@@ -96,6 +96,21 @@ def user_profile(username=None):
     return render_template("user_profile.html", username=username, posts=posts)
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register that the user createa a new account."""
+    form = RegisterForm(request.form)
+    with app.app_context():
+        db = get_db()
+        if form.validate_on_submit():
+            if db.users.add_user(form.username.data, form.password.data) == "Success":
+                return redirect(url_for("login", username=form.username.data))
+            else:
+                # User already exists. Notify the user.
+                return redirect(url_for("index", error="User already exists"))
+        return render_template("index.html", form=form)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Login page using the LoginForm."""
