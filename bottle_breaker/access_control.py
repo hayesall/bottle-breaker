@@ -2,11 +2,9 @@
 # MIT License or Apache 2.0 License, at your choosing
 
 import secrets
-import sqlite3
 from datetime import datetime
 from hashlib import pbkdf2_hmac
-from os import PathLike
-from typing import Optional, Union
+from typing import Optional
 
 from flask_login import AnonymousUserMixin, UserMixin
 from flask_wtf import FlaskForm
@@ -15,33 +13,18 @@ from wtforms import PasswordField, StringField, validators
 from bottle_breaker._base_db import BaseDB
 
 
-def create_tables(db_path: Union[str, PathLike] = "sample_database.db"):
-    """First-time setup to create all tables in the database."""
-    conn = sqlite3.connect(db_path)
-    curr = conn.cursor()
-    with open("schema.sql", "r") as fh:
-        curr.executescript(fh.read())
-    conn.commit()
-
-
 class Users(BaseDB):
     """User management and access control."""
 
     HASHING_ITERATIONS = 500_000
 
-    def get_users(self):
-        self.curr.execute("SELECT display_name, username, email FROM users")
-        return self.curr.fetchall()
-
     def get_usernames(self):
         self.curr.execute("SELECT username FROM users")
         return [user["username"] for user in self.curr.fetchall()]
 
-    def set_display_name(self, username: str, display_name: str):
-        self.curr.execute(
-            "UPDATE users SET display_name = ? WHERE username = ?",
-            (display_name, username),
-        )
+    def delete_user(self, username: str):
+        self.curr.execute("PRAGMA foreign_keys = ON;")
+        self.curr.execute("DELETE FROM users WHERE username = ?;", (username,))
         self.commit()
 
     def add_user(

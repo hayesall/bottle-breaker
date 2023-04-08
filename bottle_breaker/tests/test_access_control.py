@@ -10,7 +10,8 @@ import os
 
 import pytest
 
-from bottle_breaker.access_control import Users, create_tables
+from bottle_breaker._base_db import create_tables
+from bottle_breaker.access_control import Users
 
 
 @pytest.fixture

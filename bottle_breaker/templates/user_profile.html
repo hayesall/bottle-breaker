@@ -3,6 +3,25 @@
 
 {% block content %}
 
-<p>Hi {{ current_user.id }}! You are currently signed in.</p>
+{% if not posts %}
+    <p>No posts yet!</p>
+{% else %}
+
+<h3 class="display-3">Posts</h3>
+
+{% for post in posts %}
+
+<div class="card m-5 p-2">
+    <div class="card-body">
+        <h5 class="card-title">{{ post.by_user }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ post.post_time }}</h6>
+        <p class="card-text">{{ post.content | safe }}</p>
+    </div>
+</div>
+
+{% endfor %}
+
+
+{% endif %}
 
 {% endblock %}
