@@ -10,6 +10,15 @@ from os import PathLike
 from typing import Union
 
 
+def create_tables(db_path: Union[str, PathLike] = "sample_database.db"):
+    """First-time setup to create all tables in the database."""
+    conn = sqlite3.connect(db_path)
+    curr = conn.cursor()
+    with open("schema.sql", "r") as fh:
+        curr.executescript(fh.read())
+    conn.commit()
+
+
 class BaseDB:
     """Base class to setup a database connection and cursor."""
 

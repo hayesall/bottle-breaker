@@ -15,15 +15,6 @@ from wtforms import PasswordField, StringField, validators
 from bottle_breaker._base_db import BaseDB
 
 
-def create_tables(db_path: Union[str, PathLike] = "sample_database.db"):
-    """First-time setup to create all tables in the database."""
-    conn = sqlite3.connect(db_path)
-    curr = conn.cursor()
-    with open("schema.sql", "r") as fh:
-        curr.executescript(fh.read())
-    conn.commit()
-
-
 class Users(BaseDB):
     """User management and access control."""
 
