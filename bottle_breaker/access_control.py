@@ -2,11 +2,9 @@
 # MIT License or Apache 2.0 License, at your choosing
 
 import secrets
-import sqlite3
 from datetime import datetime
 from hashlib import pbkdf2_hmac
-from os import PathLike
-from typing import Optional, Union
+from typing import Optional
 
 from flask_login import AnonymousUserMixin, UserMixin
 from flask_wtf import FlaskForm
