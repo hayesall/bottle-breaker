@@ -26,3 +26,13 @@ class BaseDB:
 
     def commit(self):
         self.conn.commit()
+
+    def repl(self):
+        """Start a REPL for the database."""
+        while True:
+            command = input("sqlite3> ")
+            if command == "exit":
+                break
+            self.curr.execute(command)
+            print([(*row,) for row in self.curr.fetchall()])
+            self.commit()
