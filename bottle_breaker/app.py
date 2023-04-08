@@ -7,7 +7,7 @@ from typing import Union
 from flask import Flask, g, redirect, render_template, request, url_for
 from flask_login import LoginManager, login_required, login_user, logout_user
 
-from bottle_breaker.access_control import AnonymousUser, LoginForm, User, Users
+from bottle_breaker.access_control import AnonymousUser, LoginForm, User, Users, RegisterForm
 from bottle_breaker.posts import Posts
 
 
@@ -72,7 +72,7 @@ def index():
     with app.app_context():
         db = get_db()
         posts = db.posts.get_posts()
-    return render_template("index.html", posts=posts)
+    return render_template("index.html", posts=posts, form=RegisterForm())
 
 
 @app.route("/make-post", methods=["POST"])
