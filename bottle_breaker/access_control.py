@@ -84,6 +84,13 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", [validators.DataRequired()])
 
 
+class RegisterForm(FlaskForm):
+    username = StringField("Username", [validators.DataRequired()])
+    password = PasswordField("Password", [validators.DataRequired()])
+    confirm_password = PasswordField(
+        "Confirm Password", [validators.DataRequired(), validators.EqualTo("password")]
+    )
+
 class User(UserMixin):
     DB_PATH = "sample_database.db"
 
