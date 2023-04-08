@@ -5,6 +5,8 @@
 First-time database setup for reproducibility.
 """
 
+from time import sleep
+
 from bottle_breaker.access_control import create_tables
 from bottle_breaker.app import Database
 
@@ -19,4 +21,20 @@ db.users.add_user("bob", "bob_password")
 db.users.add_user("eve", "eve_password")
 
 db.users.commit()
+
+db.posts.make_post("alice", "Hello, world!")
+sleep(1)
+db.posts.make_post("bob", "Hello, Alice!")
+sleep(1)
+db.posts.make_post(
+    "eve",
+    "<strong><em>Check this out</em></strong>: if you type your password in a post it will be invisible: <strong>********</strong> this is so cool!",
+)
+sleep(1)
+db.posts.make_post("alice", "<strong>@bob</strong> hi bob!")
+sleep(1)
+db.posts.make_post("bob", "<strong>@alice</strong> lol hi alice")
+
+db.posts.commit()
+
 db.close()
