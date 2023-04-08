@@ -68,7 +68,8 @@ def load_user(username):
 
 @app.route("/")
 def index():
-    """Home page, showing all posts when the user is logged in."""
+    """Home page, showing all posts when the user is logged in or a
+     registration form otherwise"""
     with app.app_context():
         db = get_db()
         posts = db.posts.get_posts()
