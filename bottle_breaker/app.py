@@ -68,13 +68,31 @@ def load_user(username):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    """Home page, showing all posts when the user is logged in."""
+    with app.app_context():
+        db = get_db()
+        posts = db.posts.get_posts()
+    return render_template("index.html", posts=posts)
+
+
+@app.route("/make-post", methods=["POST"])
+@login_required
+def make_post():
+    """Page for posting a new message."""
+    with app.app_context():
+        db = get_db()
+        db.posts.make_post(request.args["author"], request.form["makeNewPost"])
+    return redirect(url_for("index"))
 
 
 @app.route("/profile/<username>")
 @login_required
 def user_profile(username=None):
-    return render_template("user_profile.html", username=username)
+    """User profile page, showing all of their posts."""
+    with app.app_context():
+        db = get_db()
+        posts = db.posts.get_posts_from_username(username)
+    return render_template("user_profile.html", username=username, posts=posts)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -92,9 +110,7 @@ def login():
                 user.id = form.username.data
                 login_user(user)
 
-                return redirect(
-                    url_for("user_profile", username=form.username.data)
-                )
+                return redirect(url_for("index"))
             return redirect(url_for("login"))
 
     return render_template("login.html", form=form)
