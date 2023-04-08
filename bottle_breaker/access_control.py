@@ -5,6 +5,7 @@ import secrets
 from datetime import datetime
 from hashlib import pbkdf2_hmac
 from typing import Optional
+from sqlite3 import IntegrityError
 
 from flask_login import AnonymousUserMixin, UserMixin
 from flask_wtf import FlaskForm
@@ -43,18 +44,22 @@ class Users(BaseDB):
             "sha256", password.encode(), salt.encode(), self.HASHING_ITERATIONS
         )
 
-        self.curr.execute(
-            "INSERT INTO users (username, password_hash, salt, last_reset) VALUES (?, ?, ?, ?)",
-            (
-                username,
-                hashed_password,
-                salt,
-                datetime.now(),
-            ),
-        )
-        self.commit()
+        try:
+            self.curr.execute(
+                "INSERT INTO users (username, password_hash, salt, last_reset) VALUES (?, ?, ?, ?)",
+                (
+                    username,
+                    hashed_password,
+                    salt,
+                    datetime.now(),
+                ),
+            )
+            self.commit()
+            return "Success"
 
-        return password
+        except IntegrityError:
+            return "Username already exists"
+
 
     def verify_user(self, username: str, password: str):
         """Returns True if the user exists and their password is correct."""
