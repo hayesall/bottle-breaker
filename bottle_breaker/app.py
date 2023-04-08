@@ -117,7 +117,11 @@ def register():
             else:
                 # User already exists. Notify the user.
                 print("Yep, that user exists.")
-                return render_template("index.html", form=form, username_error="User already exists.")
+                return render_template(
+                    "index.html",
+                    form=form,
+                    username_error="User already exists.",
+                )
         return render_template("index.html", form=form)
 
 
