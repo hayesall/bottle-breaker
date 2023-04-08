@@ -7,7 +7,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "flask_xss_demo.app",
+                "FLASK_APP": "bottle_breaker.app",
                 "FLASK_DEBUG": "1"
             },
             "args": [
