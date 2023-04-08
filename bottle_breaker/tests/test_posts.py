@@ -9,8 +9,8 @@ import os
 
 import pytest
 
-from bottle_breaker.posts import Posts
 from bottle_breaker._base_db import create_tables
+from bottle_breaker.posts import Posts
 
 
 @pytest.fixture
@@ -35,10 +35,10 @@ def test_create_two_posts(posts_database):
 
     _posts = posts_database.get_posts()
 
-    assert _posts[0]['by_user'] == "user1"
-    assert _posts[0]['content'] == "content1"
-    assert _posts[1]['by_user'] == "user2"
-    assert _posts[1]['content'] == "content2"
+    assert _posts[0]["by_user"] == "user1"
+    assert _posts[0]["content"] == "content1"
+    assert _posts[1]["by_user"] == "user2"
+    assert _posts[1]["content"] == "content2"
 
 
 def test_get_posts_for_a_user(posts_database):
@@ -50,10 +50,10 @@ def test_get_posts_for_a_user(posts_database):
     _posts = posts_database.get_posts_from_username("user1")
 
     assert len(_posts) == 2
-    assert _posts[0]['by_user'] == "user1"
-    assert _posts[0]['content'] == "content1"
-    assert _posts[1]['by_user'] == "user1"
-    assert _posts[1]['content'] == "content3"
+    assert _posts[0]["by_user"] == "user1"
+    assert _posts[0]["content"] == "content1"
+    assert _posts[1]["by_user"] == "user1"
+    assert _posts[1]["content"] == "content3"
 
 
 def test_delete_a_post(posts_database):
@@ -63,9 +63,9 @@ def test_delete_a_post(posts_database):
     posts_database.make_post("user1", "content3")
 
     _posts = posts_database.get_posts_from_username("user1")
-    posts_database.delete_post(_posts[0]['id'])
+    posts_database.delete_post(_posts[0]["id"])
 
     _posts = posts_database.get_posts_from_username("user1")
     assert len(_posts) == 1
-    assert _posts[0]['by_user'] == "user1"
-    assert _posts[0]['content'] == "content3"
+    assert _posts[0]["by_user"] == "user1"
+    assert _posts[0]["content"] == "content3"
