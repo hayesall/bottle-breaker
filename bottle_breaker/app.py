@@ -8,6 +8,7 @@ from flask import Flask, g, redirect, render_template, request, url_for
 from flask_login import LoginManager, login_required, login_user, logout_user
 
 from bottle_breaker.access_control import AnonymousUser, LoginForm, User, Users
+from bottle_breaker.posts import Posts
 
 
 def load_secret_key() -> str:
@@ -34,8 +35,16 @@ class Database:
     def users(self):
         return Users(self._db_path)
 
+    @property
+    def posts(self):
+        return Posts(self._db_path)
+
     def close(self):
         self.users.close()
+        self.posts.close()
+
+    def __del__(self):
+        self.close()
 
 
 def get_db():
