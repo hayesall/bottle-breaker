@@ -2,5 +2,38 @@
 {% block pagetitle %}Home{% endblock %}
 
 {% block content %}
-<h1>Hello World!</h1>
+{% if current_user.is_anonymous %}
+
+<h1 class="display-1">bottle-breaker</h1>
+
+<p class="lead"><em>The new social media sensation that's sweeping the nation!</em></p>
+{% else %}
+
+{% if not posts %}
+<p><em>Hmm... We're having trouble showing posts right now</em>. Come back in a bit!</p>
+{% else %}
+
+<form action="{{ url_for('make_post', author=current_user.id) }}" method="POST">
+    <div class="mb-3">
+        <textarea class="form-control" id="makeNewPost" name="makeNewPost" rows="3" placeholder="What's on your mind, {{ current_user.id }}?"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Post</button>
+</form>
+
+
+{% for post in posts %}
+
+<div class="card m-5 p-2">
+    <div class="card-body">
+        <a class="link-secondary" href="{{ url_for('user_profile', username=post.by_user) }}"><h5 class="card-title">{{ post.by_user }}</h5></a>
+        <h6 class="card-subtitle mb-2 text-muted">{{ post.post_time }}</h6>
+        <p class="card-text">{{ post.content | safe }}</p>
+    </div>
+</div>
+
+{% endfor %}
+{% endif %}
+
+{% endif %}
+
 {% endblock %}
