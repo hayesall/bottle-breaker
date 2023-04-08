@@ -116,7 +116,8 @@ def register():
                 return redirect(url_for("login", username=form.username.data))
             else:
                 # User already exists. Notify the user.
-                return redirect(url_for("index", error="User already exists"))
+                print("Yep, that user exists.")
+                return render_template("index.html", form=form, username_error="User already exists.")
         return render_template("index.html", form=form)
 
 
