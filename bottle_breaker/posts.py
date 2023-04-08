@@ -17,7 +17,7 @@ class Posts(BaseDB):
     def get_posts_from_username(self, username: str):
         """Get the posts made by a specific user."""
         self.curr.execute(
-            "SELECT * FROM posts JOIN users ON posts.by_user = users.username WHERE users.username = ? ORDER BY posts.post_time DESC",
+            "SELECT * FROM posts WHERE by_user = ? ORDER BY post_time DESC",
             (username,),
         )
         return self.curr.fetchall()
