@@ -12,14 +12,14 @@
 <form method="POST" action="/login">
     {{ form.csrf_token }}
 
-    <div>{{ form.username.label }}: {{ form.username(class="css_class", value=request.args.username) }}</div>
+    <div>{{ form.username(class="m-2", value=request.args.username, placeholder="Username") }}</div>
     {% if form.username.errors %}
-        <ul class="errors">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        <ul class="text-danger">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
 
-    <div>{{ form.password.label }}: {{ form.password() }}</div>
+    <div>{{ form.password(class="m-2", placeholder="Password") }}</div>
     {% if form.password.errors %}
-        <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        <ul class="text-danger">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
 
     <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
