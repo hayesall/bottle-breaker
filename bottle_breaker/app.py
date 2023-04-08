@@ -7,7 +7,13 @@ from typing import Union
 from flask import Flask, g, redirect, render_template, request, url_for
 from flask_login import LoginManager, login_required, login_user, logout_user
 
-from bottle_breaker.access_control import AnonymousUser, LoginForm, User, Users, RegisterForm
+from bottle_breaker.access_control import (
+    AnonymousUser,
+    LoginForm,
+    RegisterForm,
+    User,
+    Users,
+)
 from bottle_breaker.posts import Posts
 
 
@@ -69,7 +75,7 @@ def load_user(username):
 @app.route("/")
 def index():
     """Home page, showing all posts when the user is logged in or a
-     registration form otherwise"""
+    registration form otherwise"""
     with app.app_context():
         db = get_db()
         posts = db.posts.get_posts()
@@ -103,7 +109,10 @@ def register():
     with app.app_context():
         db = get_db()
         if form.validate_on_submit():
-            if db.users.add_user(form.username.data, form.password.data) == "Success":
+            if (
+                db.users.add_user(form.username.data, form.password.data)
+                == "Success"
+            ):
                 return redirect(url_for("login", username=form.username.data))
             else:
                 # User already exists. Notify the user.
