@@ -7,7 +7,7 @@ First-time database setup for reproducibility.
 
 from time import sleep
 
-from bottle_breaker.access_control import create_tables
+from bottle_breaker._base_db import create_tables
 from bottle_breaker.app import Database
 
 # Default location when 'app.root_path' runs
