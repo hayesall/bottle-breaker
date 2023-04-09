@@ -5,22 +5,31 @@
 Handle making and getting posts.
 """
 
+from sqlite3 import OperationalError
 from bottle_breaker._base_db import BaseDB
 
 
 class Posts(BaseDB):
     def get_posts(self):
         """Get all posts."""
-        self.curr.execute("SELECT * FROM posts ORDER BY posts.post_time DESC")
-        return self.curr.fetchall()
+
+        try:
+            self.curr.execute("SELECT * FROM posts ORDER BY posts.post_time DESC")
+            return self.curr.fetchall()
+        except OperationalError:
+            return []
 
     def get_posts_from_username(self, username: str):
         """Get the posts made by a specific user."""
-        self.curr.execute(
-            "SELECT * FROM posts WHERE by_user = ? ORDER BY post_time DESC",
-            (username,),
-        )
-        return self.curr.fetchall()
+
+        try:
+            self.curr.execute(
+                "SELECT * FROM posts WHERE by_user = ? ORDER BY post_time DESC",
+                (username,),
+            )
+            return self.curr.fetchall()
+        except OperationalError:
+            return []
 
     def make_post(self, author, content):
         self.curr.execute(
