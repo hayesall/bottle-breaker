@@ -5,13 +5,19 @@ from os import PathLike, path
 from typing import Union
 
 from flask import Flask, g, redirect, render_template, request, url_for
-from flask_login import current_user, LoginManager, login_required, login_user, logout_user
+from flask_login import (
+    LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+)
 
 from bottle_breaker.access_control import (
     AnonymousUser,
+    ChangeUsernameForm,
     LoginForm,
     RegisterForm,
-    ChangeUsernameForm,
     User,
     Users,
 )
@@ -116,8 +122,15 @@ def user_settings():
         db = get_db()
 
         if form.validate_on_submit():
-            if db.users.change_username(current_user.id, form.new_username.data) == "Success":
-                return redirect(url_for("login", username=form.new_username.data))
+            if (
+                db.users.change_username(
+                    current_user.id, form.new_username.data
+                )
+                == "Success"
+            ):
+                return redirect(
+                    url_for("login", username=form.new_username.data)
+                )
             else:
                 # User already exists. Notify the user.
                 return render_template(
