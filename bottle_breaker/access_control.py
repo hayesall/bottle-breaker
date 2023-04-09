@@ -38,7 +38,6 @@ class Users(BaseDB):
         """
 
         try:
-
             script = f"PRAGMA foreign_keys = ON; UPDATE users SET username = '{new_username}' WHERE username = '{old_username}';"
             self.curr.executescript(script)
             self.commit()
