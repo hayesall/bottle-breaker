@@ -105,6 +105,29 @@ def delete_post(username: str = None, post_id: int = None):
     return redirect(url_for("user_profile", username=username))
 
 
+@app.route("/settings", methods=["GET", "POST"])
+@login_required
+def user_settings():
+    """User settings page."""
+
+    form = ChangeUsernameForm(request.form)
+
+    with app.app_context():
+        db = get_db()
+
+        if form.validate_on_submit():
+            if db.users.change_username(current_user.id, form.new_username.data) == "Success":
+                return redirect(url_for("login", username=form.new_username.data))
+            else:
+                # User already exists. Notify the user.
+                return render_template(
+                    "settings.html",
+                    form=form,
+                    username_error="User already exists, please choose something else.",
+                )
+        return render_template("settings.html", form=form)
+
+
 @app.route("/profile/<username>")
 @login_required
 def user_profile(username=None):
