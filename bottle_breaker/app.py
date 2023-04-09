@@ -5,12 +5,13 @@ from os import PathLike, path
 from typing import Union
 
 from flask import Flask, g, redirect, render_template, request, url_for
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import current_user, LoginManager, login_required, login_user, logout_user
 
 from bottle_breaker.access_control import (
     AnonymousUser,
     LoginForm,
     RegisterForm,
+    ChangeUsernameForm,
     User,
     Users,
 )
