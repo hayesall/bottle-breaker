@@ -6,6 +6,7 @@ Handle making and getting posts.
 """
 
 from sqlite3 import OperationalError
+
 from bottle_breaker._base_db import BaseDB
 
 
@@ -14,7 +15,9 @@ class Posts(BaseDB):
         """Get all posts."""
 
         try:
-            self.curr.execute("SELECT * FROM posts ORDER BY posts.post_time DESC")
+            self.curr.execute(
+                "SELECT * FROM posts ORDER BY posts.post_time DESC"
+            )
             return self.curr.fetchall()
         except OperationalError:
             return []
