@@ -92,6 +92,16 @@ def make_post():
     return redirect(url_for("index"))
 
 
+@app.route("/delete-post/<username>/<int:post_id>", methods=["POST"])
+@login_required
+def delete_post(username: str = None, post_id: int = None):
+    """Delete a post."""
+    with app.app_context():
+        db = get_db()
+        db.posts.delete_post(post_id)
+    return redirect(url_for("user_profile", username=username))
+
+
 @app.route("/profile/<username>")
 @login_required
 def user_profile(username=None):

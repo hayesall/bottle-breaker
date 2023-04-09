@@ -46,7 +46,7 @@
 
 <form action="{{ url_for('make_post', author=current_user.id) }}" method="POST">
     <div class="mb-3">
-        <textarea class="form-control" id="makeNewPost" name="makeNewPost" rows="3" placeholder="What's on your mind, {{ current_user.id }}?"></textarea>
+        <textarea required class="form-control" id="makeNewPost" name="makeNewPost" rows="3" placeholder="What's on your mind, {{ current_user.id }}?"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Post</button>
 </form>
@@ -56,8 +56,7 @@
 
 <div class="card m-5 p-2">
     <div class="card-body">
-        <a class="link-secondary" href="{{ url_for('user_profile', username=post.by_user) }}"><h5 class="card-title">{{ post.by_user }}</h5></a>
-        <h6 class="card-subtitle mb-2 text-muted">{{ post.post_time }}</h6>
+        <a class="link-secondary text-decoration-none" href="{{ url_for('user_profile', username=post.by_user) }}"><h5 class="card-title">{{ post.by_user }} (<span class="card-subtitle mb-2 text-muted">{{ post.post_time }}</span>)</h5></a>
         <p class="card-text">{{ post.content | safe }}</p>
     </div>
 </div>
