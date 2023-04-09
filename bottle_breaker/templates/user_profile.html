@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if not posts %}
-    <p>No posts yet!</p>
+    <h5 class="display-5">No posts yet... Say what's <a href="{{ url_for('index') }}">on your mind!</a></h5>
 {% else %}
 
 <h3 class="display-3">Posts</h3>
