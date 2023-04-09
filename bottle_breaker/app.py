@@ -35,6 +35,8 @@ DB_PATH = path.join(app.root_path, "sample_database.db")
 
 
 class Database:
+    """Database object, implementing something like the MVC pattern."""
+
     def __init__(self, db_path: Union[str, PathLike] = "sample_database.db"):
         self._db_path = db_path
 
