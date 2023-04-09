@@ -28,6 +28,28 @@ class Users(BaseDB):
         self.curr.execute("DELETE FROM users WHERE username = ?;", (username,))
         self.commit()
 
+    def change_username(self, old_username: str, new_username: str):
+        """Change a user's username, returning an error if the username
+        is already taken.
+
+        This also needs to update the `posts` table to reflect the
+        changed username, which should be handled by the database
+        foreign keys + cascading update.
+        """
+
+        try:
+            self.curr.execute("PRAGMA foreign_keys = ON;")
+            self.curr.execute(
+                "UPDATE users SET username = ? WHERE username = ?;",
+                (new_username, old_username),
+            )
+            self.commit()
+
+            return "Success"
+
+        except IntegrityError:
+            return "Username already exists"
+
     def add_user(
         self,
         username: str,
