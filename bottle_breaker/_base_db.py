@@ -42,6 +42,11 @@ class BaseDB:
             command = input("sqlite3> ")
             if command == "exit":
                 break
-            self.curr.execute(command)
-            print([(*row,) for row in self.curr.fetchall()])
+
+            try:
+                self.curr.execute(command)
+            except sqlite3.OperationalError as e:
+                print(e, "\n")
+                continue
+            print("\n".join(str((*row,)) for row in self.curr.fetchall()))
             self.commit()
