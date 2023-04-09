@@ -23,4 +23,5 @@ CREATE TABLE posts (
         FOREIGN KEY (by_user)
         REFERENCES users (username)
         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );

@@ -3,11 +3,17 @@
 
 {% block content %}
 
+<h3 class="display-3">{{ username }}</h3>
+
+{% if current_user.id == username %}
+<a href="{{ url_for('user_settings') }}" class="btn btn-success mb-5">Settings</a>
+{% endif %}
+
 {% if not posts %}
     <h5 class="display-5">No posts yet... Say what's <a href="{{ url_for('index') }}">on your mind!</a></h5>
 {% else %}
 
-<h3 class="display-3">Posts</h3>
+<h5 class="display-5">Posts</h3>
 
 {% for post in posts %}
 

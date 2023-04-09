@@ -5,10 +5,17 @@ from os import PathLike, path
 from typing import Union
 
 from flask import Flask, g, redirect, render_template, request, url_for
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import (
+    LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+)
 
 from bottle_breaker.access_control import (
     AnonymousUser,
+    ChangeUsernameForm,
     LoginForm,
     RegisterForm,
     User,
@@ -34,6 +41,8 @@ DB_PATH = path.join(app.root_path, "sample_database.db")
 
 
 class Database:
+    """Database object, implementing something like the MVC pattern."""
+
     def __init__(self, db_path: Union[str, PathLike] = "sample_database.db"):
         self._db_path = db_path
 
@@ -100,6 +109,36 @@ def delete_post(username: str = None, post_id: int = None):
         db = get_db()
         db.posts.delete_post(post_id)
     return redirect(url_for("user_profile", username=username))
+
+
+@app.route("/settings", methods=["GET", "POST"])
+@login_required
+def user_settings():
+    """User settings page."""
+
+    form = ChangeUsernameForm(request.form)
+
+    with app.app_context():
+        db = get_db()
+
+        if form.validate_on_submit():
+            if (
+                db.users.change_username(
+                    current_user.id, form.new_username.data
+                )
+                == "Success"
+            ):
+                return redirect(
+                    url_for("login", username=form.new_username.data)
+                )
+            else:
+                # User already exists. Notify the user.
+                return render_template(
+                    "settings.html",
+                    form=form,
+                    username_error="User already exists, please choose something else.",
+                )
+        return render_template("settings.html", form=form)
 
 
 @app.route("/profile/<username>")
