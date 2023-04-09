@@ -131,13 +131,12 @@ def user_settings():
                 return redirect(
                     url_for("login", username=form.new_username.data)
                 )
-            else:
-                # User already exists. Notify the user.
-                return render_template(
-                    "settings.html",
-                    form=form,
-                    username_error="User already exists, please choose something else.",
-                )
+            # User already exists. Notify the user.
+            return render_template(
+                "settings.html",
+                form=form,
+                username_error="User already exists, please choose something else.",
+            )
         return render_template("settings.html", form=form)
 
 
@@ -163,14 +162,12 @@ def register():
                 == "Success"
             ):
                 return redirect(url_for("login", username=form.username.data))
-            else:
-                # User already exists. Notify the user.
-                print("Yep, that user exists.")
-                return render_template(
-                    "index.html",
-                    form=form,
-                    username_error="User already exists.",
-                )
+            # User already exists. Notify the user.
+            return render_template(
+                "index.html",
+                form=form,
+                username_error="User already exists.",
+            )
         return render_template("index.html", form=form)
 
 
@@ -191,7 +188,6 @@ def login():
 
                 return redirect(url_for("index"))
             return redirect(url_for("login"))
-
     return render_template("login.html", form=form)
 
 
@@ -202,10 +198,10 @@ def logout():
 
 
 @app.errorhandler(401)
-def user_unauthorized(e):
+def user_unauthorized(err):
     return render_template("401.html"), 401
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(err):
     return render_template("404.html"), 404
