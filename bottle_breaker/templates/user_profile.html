@@ -16,6 +16,12 @@
         <h5 class="card-title">{{ post.by_user }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">{{ post.post_time }}</h6>
         <p class="card-text">{{ post.content | safe }}</p>
+
+        {% if current_user.id == username %}
+        <form action="{{ url_for('delete_post', username=username, post_id=post.id) }}" method="POST">
+            <button type="submit" class="btn btn-danger rounded-0">X</button>
+        </form>
+        {% endif %}
     </div>
 </div>
 
