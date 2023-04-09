@@ -46,7 +46,7 @@
 
 <form action="{{ url_for('make_post', author=current_user.id) }}" method="POST">
     <div class="mb-3">
-        <textarea class="form-control" id="makeNewPost" name="makeNewPost" rows="3" placeholder="What's on your mind, {{ current_user.id }}?"></textarea>
+        <textarea required class="form-control" id="makeNewPost" name="makeNewPost" rows="3" placeholder="What's on your mind, {{ current_user.id }}?"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Post</button>
 </form>
