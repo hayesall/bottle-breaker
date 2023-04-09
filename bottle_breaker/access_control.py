@@ -100,6 +100,10 @@ class RegisterForm(FlaskForm):
     )
 
 
+class ChangeUsernameForm(FlaskForm):
+    new_username = StringField("New Username", [validators.DataRequired()])
+
+
 class User(UserMixin):
     DB_PATH = "sample_database.db"
 
