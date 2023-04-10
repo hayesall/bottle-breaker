@@ -13,11 +13,22 @@ cd bottle-breaker
 
 2. Create a virtual environment and install dependencies
 
+**Linux / MacOS**
+
 ```bash
-python -m venv venv
+python -m venv venv              # or:    python3 -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
+```
+
+**Windows + PowerShell** (or see [venv docs for your platform](https://docs.python.org/3/library/venv.html#how-venvs-work))
+
+```bash
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+pip install -r .\requirements.txt
 ```
 
 ## Scavenger Hunt
