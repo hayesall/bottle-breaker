@@ -22,9 +22,44 @@ pip install -r requirements.txt
 
 ## Scavenger Hunt
 
-1. Login, and make a post as a *different* user. e.g.: If you are logged in as `alice`, make a post as `bob`. (*Hint*: Inspect the HTML around the post).
-2. Open two browser windows (e.g. Chrome and Firefox, or Chrome + Chrome Incognito), and log in as two different users. e.g.: `alice` and `bob`. Make a post as `alice` that executes JavaScript code when `bob` logs in.
-3. Delete a post made by another user: *without* SQL injection and *without* logging in as that user.
+### 1. Make a post as a *different* user
+
+
+<details>
+<summary><strong>Problem 1 Hints</strong></summary>
+
+<details>
+<summary>Hint #1</summary>
+
+The post form on the home page is vulnerable. View page source, read how the `POST` method works, and see if you can make a post as a different user.
+
+</details>
+
+</details>
+
+---
+
+### 2. Trigger JavaScript to execute when users view a post
+
+---
+
+### 3. Delete a post made by another user
+
+You can do this without SQL injection.
+
+<details>
+<summary><strong>Problem 3 Hints</strong></summary>
+
+<details>
+<summary>Hint #1</summary>
+
+The `delete_post` method in `app.py` is vulnerable. Go to your profile, view page source, and figure out how the form submission works.
+
+</details>
+
+</details>
+
+---
 
 ### 4. Use an SQL injection attack to drop the `posts` table
 
@@ -104,6 +139,8 @@ alice2' WHERE username = 'alice'; DROP TABLE posts; --
 
 
 </details>
+
+---
 
 ## Legal Points
 
