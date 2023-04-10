@@ -46,11 +46,80 @@ The post form on the home page is vulnerable. View page source, read how the `PO
 
 </details>
 
+<details>
+<summary>Hint #2</summary>
+
+The page inspector or developer tools (in Firefox, Chrome, Opera, etc.) can be accessed by clicking on an element and selecting "Inspect", or with the shortcut <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>I</kbd> / <kbd>⌘</kbd> + <kbd>OPTION</kbd> + <kbd>I</kbd>.
+
+If you modify something on the page and click <kbd>ENTER</kbd>, the document object model displayed by your browser is updated. This includes all form elements.
+
+</details>
+
+
+<details>
+<summary>Hint #3</summary>
+
+The form on the home page lists something like: `action="/make-post@author=hayesall"`
+
+</details>
+
+<details>
+<summary>Solution</summary>
+
+Change the name of the user in the developer tools to something like: `action="/make-post@author=alice"`, and click enter. When you make a post, the post is inserted into the database as `alice` instead of your username.
+
+This form is vulnerable because it inserts the name of the logged-in user into the form, but does not validate that the user making the `POST` request is the same as the user who clicks the button.
+
+</details>
+
+
 </details>
 
 ---
 
 ### 2. Trigger JavaScript to execute when users view a post
+
+<details>
+<summary><strong>Problem 2 Hints</strong></summary>
+
+<details>
+<summary>Hint #1</summary>
+
+The form on the home page allows users to style their posts with basic HTML formatting. For example, users can post something like:
+
+```html
+<strong>Hello</strong> <em>World!</em>
+```
+
+... in order to style their posts with bold or italic formatting.
+
+</details>
+
+<details>
+<summary>Hint #2</summary>
+
+The `index.html` template includes something that says: `{{ post.content | safe }}`.
+
+Normally, we should only use the `safe` filter on content that we have verified is safe.
+
+</details>
+
+
+<details>
+<summary>Solution</summary>
+
+The way we display posts includes a **cross-site scripting** (XSS) vulnerability. Users can post something like:
+
+```html
+<script>alert('samy is my hero');</script>
+```
+
+When users view this post, the JavaScript gets executed, triggering an "Alert" message in their browser.
+
+</details>
+
+
+</details>
 
 ---
 
@@ -67,6 +136,47 @@ You can do this without SQL injection.
 The `delete_post` method in `app.py` is vulnerable. Go to your profile, view page source, and figure out how the form submission works.
 
 </details>
+
+<details>
+<summary>Hint #2</summary>
+
+This is similar to the solution for the first problem.
+
+</details>
+
+<details>
+<summary>Hint #3</summary>
+
+`user_profile.html` inserts "Delete" buttons with the following code:
+
+```html
+{% if current_user.id == username %}
+<form action="{{ url_for('delete_post', username=username, post_id=post.id) }}" method="POST">
+    <button type="submit" class="btn btn-danger rounded-0">X</button>
+</form>
+{% endif %}
+```
+
+</details>
+
+
+<details>
+<summary>Solution</summary>
+
+Similar to the first problem, the backend uses an API that does not verify who is making a request to an endpoint. Furthermore, it does not even check whether the post number belongs to the user 😬
+
+The `user_profile.html` template conditionally inserts delete buttons *only* when the logged in user is the same as the user viewing the page, but there is nothing stopping *anyone* from triggering the API on form submission.
+
+Change the form action to something like:
+
+```
+/delete-post/hayesall/1
+```
+
+... and click the red submit button.
+
+</details>
+
 
 </details>
 
