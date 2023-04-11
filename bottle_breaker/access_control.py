@@ -51,7 +51,7 @@ class Users(BaseDB):
         username: str,
         password: str,
     ) -> str:
-        """Add a new user, returning a temporary password or a chosen password."""
+        """Add a new user, returning 'Success' or an Error"""
 
         salt = secrets.token_hex(32)
 
