@@ -48,7 +48,7 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 
 # Windows seems to take issue with the 'requirements.txt' file, try this:
-pip install Flask==2.2.3 Flask-Login==0.6.2 Flask-WTF==1.1.1 Forms==3.0.1
+pip install Flask==2.2.3 Flask-Login==0.6.2 Flask-WTF==1.1.1 WTForms==3.0.1
 ```
 
 ## Scavenger Hunt
