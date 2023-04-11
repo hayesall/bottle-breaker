@@ -99,7 +99,7 @@ class Users(BaseDB):
             self.HASHING_ITERATIONS,
         )
 
-        return hashed_password == user_hash
+        return secrets.compare_digest(hashed_password, user_hash)
 
 
 class LoginForm(FlaskForm):
