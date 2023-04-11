@@ -2,6 +2,8 @@
 
 *A small flask application to demonstrate potential security vulnerabilities that may come up when writing web applications. i.e.: cross-site scripting (XSS) vulnerabilities and SQL injection attacks.*
 
+![Screen recording of interacting with the site. First signing up as new user hayesall, then making a post saying Hi World!](docs/demo_site.gif)
+
 ## Setup and run
 
 ### 1. Clone the repository
