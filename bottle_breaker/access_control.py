@@ -5,7 +5,6 @@ import secrets
 from datetime import datetime
 from hashlib import pbkdf2_hmac
 from sqlite3 import IntegrityError
-from typing import Optional
 
 from flask_login import AnonymousUserMixin, UserMixin
 from flask_wtf import FlaskForm
@@ -50,14 +49,11 @@ class Users(BaseDB):
     def add_user(
         self,
         username: str,
-        password: Optional[str] = None,
+        password: str,
     ) -> str:
         """Add a new user, returning a temporary password or a chosen password."""
 
         salt = secrets.token_hex(32)
-
-        if password is None:
-            password = secrets.token_hex(4)
 
         hashed_password = pbkdf2_hmac(
             "sha256", password.encode(), salt.encode(), self.HASHING_ITERATIONS
