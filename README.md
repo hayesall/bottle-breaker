@@ -1,34 +1,52 @@
-# bottle-breaker
+# bottle-breaker 🍼💥
 
 *A small flask application to demonstrate potential security vulnerabilities that may come up when writing web applications. i.e.: cross-site scripting (XSS) vulnerabilities and SQL injection attacks.*
 
 ## Setup and run
 
-1. Clone the repository
+### 1. Clone the repository
+
+**VSCode**: New Window > Clone Git Repository
+
+```bash
+https://github.com/hayesall/bottle-breaker.git
+```
+
+**Terminal**
 
 ```bash
 git clone https://github.com/hayesall/bottle-breaker.git
 cd bottle-breaker
 ```
 
-2. Create a virtual environment and install dependencies
+---
 
-**Linux / MacOS**
+### 2. Create a virtual environment and install dependencies
+
+**Linux / Chromebook**
 
 ```bash
-python -m venv venv              # or:    python3 -m venv venv
+python -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
+```
 
+**MacOS**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 **Windows + PowerShell** (or see [venv docs for your platform](https://docs.python.org/3/library/venv.html#how-venvs-work))
 
-```bash
+```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 
-pip install -r .\requirements.txt
+# Windows seems to take issue with the 'requirements.txt' file, try this:
+pip install Flask==2.2.3 Flask-Login==0.6.2 Flask-WTF==1.1.1 Forms==3.0.1
 ```
 
 ## Scavenger Hunt
@@ -250,7 +268,7 @@ script = f"PRAGMA foreign_keys = ON; UPDATE users SET username = '{new_username}
 self.curr.executescript(script)
 ```
 
-This is vulnerable because the `executescript` method allows multiple statements to be executed at once. If we can insert a semicolon into the `new_username` field and use our knowledge of our `old_username`, we can write a query that drops the `posts` table:
+This is vulnerable because the `executescript` method allows multiple statements to be executed at once, and the code uses literal string interpolation (f-strings) to build up a command. If we can insert a semicolon into the `new_username` field and use our knowledge of our `old_username`, we can write a query that drops the `posts` table:
 
 ```
 alice2' WHERE username = 'alice'; DROP TABLE posts; --
