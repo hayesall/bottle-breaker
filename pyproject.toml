@@ -9,7 +9,7 @@ requires-python = ">=3.10"
 
 # Project dependencies
 dependencies = [
-    "Flask==2.2.3",
+    "Flask==2.3.2",
     "Flask-Login==0.6.2",
     "Flask-WTF==1.1.1",
     "WTForms==3.0.1",
